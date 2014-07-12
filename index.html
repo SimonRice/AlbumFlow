@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>  
+  <title>Albumflow</title>
+
+  <style type="text/css"> 
+   *
+   {
+        margin:0;
+        padding:0;        
+   }
+    body
+    {                 
+        text-align:center;
+        background-color:#003366;
+        font-family:helvetica;
+        color:#fff;
+        font-size:13px;
+        margin-top:10px;
+    }      
+    .container {
+      width: 300px;
+      height: 295px;
+      position: relative;
+      margin: 300px auto 100px auto;
+      /*background-color:#000;
+      border: 1px solid #CCC;*/      
+      -webkit-perspective: 1100;         
+    }
+    
+    #coverflow {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      /*background-color:#000; */      
+      -webkit-transform: translateZ(20px);            
+      -webkit-transform-style: preserve-3d;              
+      /*-webkit-backface-visibility: hidden;      */
+    }
+    
+    #coverflow figure {
+      display: block;
+      position: absolute;
+      width: 300px;
+      height: 300px;      
+      border: 2px solid black; 
+      cursor:pointer;           
+      -webkit-transition: -webkit-transform 0.5s ease; 
+      -webkit-box-reflect:below 0px -webkit-gradient(linear, left top, left bottom, from(transparent),color-stop(0.7, transparent), to(white));
+       -webkit-box-shadow:8px -7px 8px rgba(0, 0, 0, 0.9);
+    } 
+    #coverflow figure img
+    {
+        width:100%;
+        height:100%;
+    }          
+    
+    /*initial configuration*/
+    #coverflow figure:nth-child(1) {
+      -webkit-transform:translateX(0px) rotateY(0deg) translateZ(200px);         
+    }
+    #coverflow figure:nth-child(2) {
+      -webkit-transform:translateX(200px) rotateY(-60deg);        
+    }
+    #coverflow figure:nth-child(3) {
+      -webkit-transform:translateX(300px) rotateY(-60deg);         
+    }
+    #coverflow figure:nth-child(4) {
+      -webkit-transform:translateX(400px) rotateY(-60deg);        
+    }
+    #coverflow figure:nth-child(5) {
+      -webkit-transform:translateX(500px) rotateY(-60deg);        
+    } 
+    #coverflow figure:nth-child(6) {
+      -webkit-transform:translateX(600px) rotateY(-60deg);        
+    } 
+    #coverflow figure:nth-child(7) {
+      -webkit-transform:translateX(700px) rotateY(-60deg);        
+    } 
+    #coverflow figure:nth-child(8) {
+      -webkit-transform:translateX(700px) rotateY(-60deg);        
+    } 
+    
+    .pushBtn
+    {
+      display: none;
+        width:100px; 
+        height:30px;  
+        cursor:pointer;   
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#90CF23), to(#6A9C1D), color-stop(.4,#8BC20A));  
+        -webkit-border-radius:5px;
+        border:none;
+        font-family:helvetica;
+        color:#fff;
+        font-size:13px;
+        font-weight:bold;
+    }       
+   
+  </style>
+
+</head>
+<body> 
+      <section class="container">
+        <div id="coverflow">
+          <figure id="fig1" cp="0" a="0" onclick="moveTo(this, true)"><img src="img/1.jpg"/></figure>
+          <figure id="fig2" cp="200" a="-60" onclick="moveTo(this, true)"><img src="img/2.jpg" /></figure>
+          <figure id="fig3" cp="300" a="-60" onclick="moveTo(this, true)"><img src="img/3.jpg" /></figure>
+          <figure id="fig4" cp="400" a="-60" onclick="moveTo(this, true)"><img src="img/4.jpg" /></figure>
+          <figure id="fig5" cp="500" a="-60" onclick="moveTo(this, true)"><img src="img/5.jpg" /></figure>
+          <figure id="fig6" cp="600" a="-60" onclick="moveTo(this, true)"><img src="img/6.jpg" /></figure>
+          <figure id="fig7" cp="700" a="-60" onclick="moveTo(this, true)"><img src="img/7.jpg" /></figure>   
+          <figure id="fig8" cp="800" a="-60" onclick="moveTo(this, true)"><img src="img/8.jpg" /></figure>          
+        </div>
+      </section>
+      <input class="pushBtn" type="button" value="Prev" onclick="left()" data="1"></div>
+      <input class="pushBtn" type="button" value="Next" onclick="right()" data="-1"></div>
+  
+  <script type="text/javascript">
+      var min = 1;
+      var max = 8;
+      var current = 1;
+      var currPos = 0;
+      var newPos = 0;
+      var currAngle = 0;
+      var newAngle = 0;
+      var gap = 100;
+      var clickedIndex = 0;      
+      var diff = 0;
+      var clicked = false;
+
+      window.onload = function() {
+        setInterval(function(){
+          if (!clicked) {
+            if (current < max)
+              right();
+            else
+              moveTo(document.getElementById("fig1"), false);
+          }
+          clicked = false;
+        }, 3000);
+      }      
+      
+      function moveTo(targetObj, viaClick) {
+        clicked = viaClick || false;                    
+          //console.log(targetObj.id);          
+              clickedIndex = parseInt(targetObj.id.slice(3, 4));
+              if (clickedIndex > current) {
+                  //move right to the clicked index
+                  console.log("Move right: " + clickedIndex + "/" + current + "/" + (clickedIndex - current));
+                  diff = clickedIndex - current;
+                  for (var i = 1; i <= diff; i++) {
+                      right();
+                  }
+              }
+              else if (clickedIndex < current) {
+                  //move left to the clicked index
+                  console.log("Move left: " + clickedIndex + "/" + current + "/" + (current - clickedIndex));
+                  diff = (current - clickedIndex);
+                  for (var i = 1; i <= diff; i++) {
+                      left();
+                  }
+              }
+              else {
+                  //same element is clicked....do nothing
+              }         
+      }
+      function left() {
+          //alert('test');
+          if (current > min) {
+              current--;
+              //console.log("Left: " + current);              
+
+              for (var i = 1; i <= max; i++) {
+                  currPos = document.getElementById("fig" + i).getAttribute("cp");
+                  currAngle = document.getElementById("fig" + i).getAttribute("a");
+                  if (currPos == "-200" || currPos == "0") {
+                      newPos = parseInt(currPos) + (gap * 2) * (1);
+                      if (currPos == "0") {
+                          newAngle = -60;
+                      }
+                      else if (currPos = "-200") {
+                          newAngle = 0;
+                      }
+                      else {
+                      }
+                  }
+                  else {
+                      newPos = parseInt(currPos) + (gap) * (1);
+                      newAngle = parseInt(currAngle);
+                  }
+                  //console.log("Curr: " + currPos + " / New: " + newPos);
+                  //console.log("Curr angle: " + currAngle + " / New Angle: " + newAngle);
+                  if (i == current) {
+                      document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(200px)";
+                  }
+                  else {
+                      document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(0)";
+                  }
+                  document.getElementById("fig" + i).setAttribute("cp", newPos);
+                  document.getElementById("fig" + i).setAttribute("a", newAngle);
+              }
+          }
+      }
+      function right() {
+          if (current < max) {
+              current++;
+              //console.log("Right: " + current);              
+
+              for (var i = 1; i <= max; i++) {
+                  currPos = document.getElementById("fig" + i).getAttribute("cp");
+                  currAngle = document.getElementById("fig" + i).getAttribute("a");
+                  if (currPos == "200" || currPos == "0") {
+                      newPos = parseInt(currPos) + (gap * 2) * (-1);
+                      if (currPos == "0") {
+                          newAngle = 60;
+                      }
+                      else if (currPos = "200") {
+                          newAngle = 0;
+                      }
+                      else {
+                      }
+                  }
+                  else {
+                      newPos = parseInt(currPos) + (gap) * (-1);
+                      newAngle = parseInt(currAngle);
+                  }
+                  //console.log("Curr: " + currPos + " / New: " + newPos);
+                  //console.log("Curr angle: " + currAngle + " / New Angle: " + newAngle);
+                  if (i == current) {
+                      document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(200px)";
+                  }
+                  else {
+                      document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(0)";
+                  }
+                  document.getElementById("fig" + i).setAttribute("cp", newPos);
+                  document.getElementById("fig" + i).setAttribute("a", newAngle);
+              }
+          }
+      }
+  </script> 
+
+</body>
+</html>
