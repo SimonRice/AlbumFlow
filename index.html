@@ -21,27 +21,35 @@
         font-family:helvetica;
         color:#fff;
         font-size:13px;
-        margin-top:10px;
         overflow-x: hidden;
     }      
     .container {
       width: 300px;
       height: 295px;
       position: relative;
-      margin: 300px auto 100px auto;
-      /*background-color:#000;
-      border: 1px solid #CCC;*/      
+      margin: 300px auto 100px auto;   
       -webkit-perspective: 1100;         
     }
     
     #coverflow {
       width: 100%;
-      height: 100%;
-      position: absolute;
-      /*background-color:#000; */      
+      height: 100%;   
       -webkit-transform: translateZ(20px);            
-      -webkit-transform-style: preserve-3d;              
-      /*-webkit-backface-visibility: hidden;      */
+      -webkit-transform-style: preserve-3d;
+    }
+    
+    @media(min-width: 480px) and (max-width: 767px) {
+      #coverflow {
+        -webkit-transform: translateZ(-400px);            
+        -webkit-transform-style: preserve-3d;
+      }
+    }
+    
+    @media(max-width:479px) {
+      #coverflow {
+        -webkit-transform: translateZ(-600px);            
+        -webkit-transform-style: preserve-3d;
+      }
     }
     
     #coverflow figure {
@@ -63,53 +71,47 @@
     
     /*initial configuration*/
     #coverflow figure:nth-child(1) {
-      -webkit-transform:translateX(0px) rotateY(0deg) translateZ(200px);         
+      -webkit-transform:translateX(0px) rotateY(0deg) translateZ(200px);  
+      z-index: 8;               
     }
     #coverflow figure:nth-child(2) {
-      -webkit-transform:translateX(200px) rotateY(-60deg);        
+      -webkit-transform:translateX(200px) rotateY(-60deg);
+      z-index: 7;        
     }
     #coverflow figure:nth-child(3) {
-      -webkit-transform:translateX(300px) rotateY(-60deg);         
+      -webkit-transform:translateX(300px) rotateY(-60deg); 
+      z-index: 6;                
     }
     #coverflow figure:nth-child(4) {
-      -webkit-transform:translateX(400px) rotateY(-60deg);        
+      -webkit-transform:translateX(400px) rotateY(-60deg);
+      z-index: 5;                
     }
     #coverflow figure:nth-child(5) {
-      -webkit-transform:translateX(500px) rotateY(-60deg);        
-    } 
+      -webkit-transform:translateX(500px) rotateY(-60deg);  
+      z-index: 4;              
+    }
     #coverflow figure:nth-child(6) {
-      -webkit-transform:translateX(600px) rotateY(-60deg);        
+      -webkit-transform:translateX(600px) rotateY(-60deg); 
+      z-index: 3;        
     } 
     #coverflow figure:nth-child(7) {
-      -webkit-transform:translateX(700px) rotateY(-60deg);        
+      -webkit-transform:translateX(700px) rotateY(-60deg);    
+      z-index: 2;     
     } 
     #coverflow figure:nth-child(8) {
-      -webkit-transform:translateX(700px) rotateY(-60deg);        
-    } 
+      -webkit-transform:translateX(700px) rotateY(-60deg);   
+      z-index: 1;      
+    }
     
-    .pushBtn
-    {
-      display: none;
-        width:100px; 
-        height:30px;  
-        cursor:pointer;   
-        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#90CF23), to(#6A9C1D), color-stop(.4,#8BC20A));  
-        -webkit-border-radius:5px;
-        border:none;
-        font-family:helvetica;
-        color:#fff;
-        font-size:13px;
-        font-weight:bold;
-    }       
-   
   </style>
 
   <meta charset="utf-8" />
   <meta content="IE=edge,chrome=1" "http-equiv"="X-UA-Compatible" />
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
 </head>
 <body> 
+      Test text
       <section class="container">
         <div id="coverflow">
           <figure id="fig1" cp="0" a="0" onclick="moveTo(this, true)"><img src="img/1.jpg"/></figure>
@@ -122,8 +124,6 @@
           <figure id="fig8" cp="800" a="-60" onclick="moveTo(this, true)"><img src="img/8.jpg" /></figure>          
         </div>
       </section>
-      <input class="pushBtn" type="button" value="Prev" onclick="left()" data="1"></div>
-      <input class="pushBtn" type="button" value="Next" onclick="right()" data="-1"></div>
   
   <script type="text/javascript">
       var min = 1;
@@ -205,6 +205,7 @@
                   }
                   else {
                       document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(0)";
+                      document.getElementById("fig" + i).style.zIndex = i < current ? 1 : max - i;
                   }
                   document.getElementById("fig" + i).setAttribute("cp", newPos);
                   document.getElementById("fig" + i).setAttribute("a", newAngle);
@@ -241,6 +242,7 @@
                   }
                   else {
                       document.getElementById("fig" + i).style.webkitTransform = "translateX(" + newPos + "px) rotateY(" + newAngle + "deg) translateZ(0)";
+                      document.getElementById("fig" + i).style.zIndex = i < current ? 1 : max - i;
                   }
                   document.getElementById("fig" + i).setAttribute("cp", newPos);
                   document.getElementById("fig" + i).setAttribute("a", newAngle);
